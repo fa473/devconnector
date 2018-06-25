@@ -16,9 +16,11 @@ mongoose.connect(db)
   .then(() => console.log('connected'))
   .catch(err => console.log(err))
 
-app.get('/', (req, res) => {
-  res.send('hello')
-})
+// Passport middleware
+app.use(passport.initialize())
+
+// Passport config
+require('./config/passport')(passport)
 
 // Parse body
 app.use(express.urlencoded({ extended: false }))

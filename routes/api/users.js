@@ -4,6 +4,11 @@ const gravatar = require('gravatar')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
 const key = require('../../config/keys').secretOrKey
+const passport = require('passport')
+
+// Load input validation
+const validateRegisterInput = require('../../validation/register')
+const validateLoginInput = require('../../validation/login')
 
 // Load user model
 const User = require('../../models/User')
@@ -20,6 +25,8 @@ router.get('/test', (req, res) => {
 // @access  Public
 router.post('/register', async (req, res) => {
   try {
+    const {errors, isValid} = validateRegisterInput(req.body)
+    if (!isValid) return res.status(400).json(errors)
     // Check if email already registered
     let user = await User.findOne({email: req.body.email})
     if (user) return res.status(400).json({email: 'email already registered'})
@@ -52,6 +59,8 @@ router.post('/register', async (req, res) => {
 // @access  Public
 router.post('/login', async (req, res) => {
   try {
+    const {errors, isValid} = validateLoginInput(req.body)
+    if (!isValid) return res.status(400).json(errors)
     const email = req.body.email
     const password = req.body.password
 
@@ -75,6 +84,13 @@ router.post('/login', async (req, res) => {
   } catch (err) {
     console.log(err)
   }
+})
+
+// @route   GET /api/users/current
+// @desc    Return current user
+// @access  Private
+router.get('/current', passport.authenticate('jwt', {session: false}), (req, res) => {
+  res.json(req.user)
 })
 
 module.exports = router
