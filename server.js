@@ -1,5 +1,6 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const passport = require('passport')
 
 const users = require('./routes/api/users')
 const profile = require('./routes/api/profile')
@@ -18,6 +19,10 @@ mongoose.connect(db)
 app.get('/', (req, res) => {
   res.send('hello')
 })
+
+// Parse body
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json())
 
 // Use routes
 app.use('/api/users', users)
