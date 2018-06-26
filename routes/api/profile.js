@@ -1,19 +1,19 @@
 const express = require('express')
-const passport = require('passport')
 const router = express.Router()
+const passport = require('passport')
+
+// Load profile validation
+const validateProfileInput = require('../../validation/profile')
 
 // Load profile model
 const Profile = require('../../models/Profile')
-
-// Load user model
-const User = require('../../models/User')
 
 // @route   GET /api/profile
 // @desc    Get current user profile
 // @access  Private
 router.get('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
-    const profile = await Profile.findOne({user: req.user.id})
+    const profile = await Profile.findOne({user: req.user.id}).populate('user', ['name', 'avatar'])
     if (!profile) return res.status(404).json({noprofile: 'There is no profile for this user'})
     res.json(profile)
   } catch (err) {
@@ -26,6 +26,9 @@ router.get('/', passport.authenticate('jwt', {session: false}), async (req, res)
 // @access  Private
 router.post('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
   try {
+    const result = validateProfileInput(req.body)
+    if (result.error) return res.status(400).json(result.error.details)
+
     // Get fields
     const profileFields = {}
     profileFields.user = req.user.id
@@ -49,16 +52,16 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
     if (req.body.linkedin) profileFields.social.linkedin = req.body.linkedin
     if (req.body.instagram) profileFields.social.instagram = req.body.instagram
 
-    const profile = await Profile.findOne({user: req.user.id})
+    let profile = await Profile.findOne({user: req.user.id})
     if (profile) {
       // Update
-      Profile.findOneAndUpdate({user: req.body.user}, {$set: profileFields}, {new: true})
+      profile = await Profile.findOneAndUpdate({user: req.user.id}, {$set: profileFields}, {new: true})
       res.json(profile)
     } else {
       // Create
 
       // Check if handle exists
-      let profile = Profile.findOne({handle: profileFields.handle})
+      let profile = await Profile.findOne({handle: profileFields.handle})
       if (profile) return res.status(400).json({handle: 'Handle already exists'})
 
       // Save profile
