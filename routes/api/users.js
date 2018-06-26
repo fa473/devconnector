@@ -26,6 +26,7 @@ router.get('/test', (req, res) => {
 router.post('/register', async (req, res) => {
   try {
     const {errors, isValid} = validateRegisterInput(req.body)
+    console.log(errors)
     if (!isValid) return res.status(400).json(errors)
     // Check if email already registered
     let user = await User.findOne({email: req.body.email})
