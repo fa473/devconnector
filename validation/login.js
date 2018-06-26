@@ -1,23 +1,9 @@
-const Validator = require('validator')
+const Joi = require('joi')
 
 module.exports = function validateLoginInput (data) {
-  let errors = {}
-
-  // Add '' to coerce input into String which is necessary for Validator
-  if (!Validator.isEmail(data.email + '')) {
-    errors.email = 'Email is invalid'
+  const schema = {
+    email: Joi.string().email().required(),
+    password: Joi.string().required()
   }
-
-  if (!data.email) {
-    errors.email = 'Email field is required'
-  }
-
-  if (!data.password) {
-    errors.password = 'Password field is required'
-  }
-
-  return {
-    errors: errors,
-    isValid: (!Object.keys(errors).length)
-  }
+  return Joi.validate(data, schema, {abortEarly: false})
 }
