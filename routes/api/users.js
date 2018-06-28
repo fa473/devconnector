@@ -18,7 +18,7 @@ const User = require('../../models/User')
 router.post('/register', async (req, res) => {
   try {
     const result = validateRegisterInput(req.body)
-    if (result.error) return res.status(400).json(result.error.details)
+    if (result.error) return res.status(400).json(result.error.message)
 
     // Check if email already registered
     let user = await User.findOne({email: req.body.email})
@@ -53,7 +53,7 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const result = validateLoginInput(req.body)
-    if (result.error) return res.status(400).json(result.error.details)
+    if (result.error) return res.status(400).json(result.error.message)
 
     // Find user by email
     const email = req.body.email

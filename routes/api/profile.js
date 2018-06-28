@@ -2,11 +2,14 @@ const express = require('express')
 const router = express.Router()
 const passport = require('passport')
 
-// Load profile validation
+// Load validation
 const validateProfileInput = require('../../validation/profile')
+const validateExperienceInput = require('../../validation/experience')
+const validateEducationInput = require('../../validation/education')
 
-// Load profile model
+// Load profile and user model
 const Profile = require('../../models/Profile')
+const User = require('../../models/User')
 
 // @route   GET /api/profile
 // @desc    Get current user profile
@@ -18,6 +21,45 @@ router.get('/', passport.authenticate('jwt', {session: false}), async (req, res)
     res.json(profile)
   } catch (err) {
     res.status(404).json(err)
+  }
+})
+
+// @route   GET /api/profile/all
+// @desc    Get all profiles
+// @access  Public
+router.get('/all', async (req, res) => {
+  try {
+    const profiles = await Profile.find().populate('user', ['name', 'avatar'])
+    if (!profiles) return res.status(404).json({noprofile: 'There are no user profiles'})
+    res.json(profiles)
+  } catch (err) {
+    res.status(404).json({noprofile: 'There are no user profiles'})
+  }
+})
+
+// @route   GET /api/profile/handle/:handle
+// @desc    Get profile by handle
+// @access  Public
+router.get('/handle/:handle', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({handle: req.params.handle}).populate('user', ['name', 'avatar'])
+    if (!profile) return res.status(404).json({noprofile: 'There is no profile for this user'})
+    res.json(profile)
+  } catch (err) {
+    res.status(404).json(err)
+  }
+})
+
+// @route   GET /api/profile/user/:user_id
+// @desc    Get profile by user id
+// @access  Public
+router.get('/user/:user_id', async (req, res) => {
+  try {
+    const profile = await Profile.findOne({user: req.params.user_id}).populate('user', ['name', 'avatar'])
+    if (!profile) return res.status(404).json({noprofile: 'There is no profile for this user'})
+    res.json(profile)
+  } catch (err) {
+    res.status(404).json({noprofile: 'There is no profile for this user'})
   }
 })
 
@@ -42,7 +84,9 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
     if (req.body.handle) profileFields.handle = req.body.handle
 
     // Skills split into array
-    if (typeof req.body.skills !== 'undefined') profileFields.skills = req.body.skills.split(',')
+    if (typeof req.body.skills !== 'undefined') {
+      profileFields.skills = req.body.skills.split(',')
+    }
 
     // Social fields
     profileFields.social = {}
@@ -59,7 +103,6 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
       res.json(profile)
     } else {
       // Create
-
       // Check if handle exists
       let profile = await Profile.findOne({handle: profileFields.handle})
       if (profile) return res.status(400).json({handle: 'Handle already exists'})
@@ -68,6 +111,130 @@ router.post('/', passport.authenticate('jwt', {session: false}), async (req, res
       profile = await new Profile(profileFields).save()
       res.json(profile)
     }
+  } catch (err) {
+    res.status(404).json(err)
+  }
+})
+
+// @route   POST /api/profile/experience
+// @desc    Add experience to profile
+// @access  Private
+router.post('/experience', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    // const errors = []
+    const result = validateExperienceInput(req.body)
+    if (result.error) return res.status(400).json(result.error.details)
+    // if (result.error) {
+    //   result.error.details.forEach( detail => {
+    //     errors.push({
+    //       key: detail.path,
+    //       detail: detail.message
+    //     })
+    //   })
+    //   return res.status(400).json(errors)
+    // }
+
+    const profile = await Profile.findOne({user: req.user.id})
+    const newExperience = {
+      title: req.body.title,
+      company: req.body.company,
+      location: req.body.location,
+      from: req.body.from,
+      to: req.body.to,
+      current: req.body.current,
+      description: req.body.description
+    }
+
+    // Add to experience array
+    profile.experience.unshift(newExperience)
+
+    await profile.save()
+    res.json(profile)
+  } catch (err) {
+    res.status(404).json(err)
+  }
+})
+
+// @route   POST /api/profile/education
+// @desc    Add education to profile
+// @access  Private
+router.post('/education', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    // const errors = []
+    const result = validateEducationInput(req.body)
+    if (result.error) return res.status(400).json(result.error.message)
+    // if (result.error) {
+    //   result.error.details.forEach( detail => {
+    //     errors.push({
+    //       key: detail.path,
+    //       detail: detail.message
+    //     })
+    //   })
+    //   return res.status(400).json(errors)
+    // }
+
+    const profile = await Profile.findOne({user: req.user.id})
+    const newEducation = {
+      school: req.body.school,
+      degree: req.body.degree,
+      fieldofstudy: req.body.fieldofstudy,
+      location: req.body.location,
+      from: req.body.from,
+      to: req.body.to,
+      current: req.body.current,
+      description: req.body.description
+    }
+
+    // Add to experience array
+    profile.education.unshift(newEducation)
+
+    await profile.save()
+    res.json(profile)
+  } catch (err) {
+    res.status(404).json(err)
+  }
+})
+
+// @route   DELETE /api/profile/experience/:exp_id
+// @desc    Delete experience from profile
+// @access  Private
+router.delete('/experience/:exp_id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    const profile = await Profile.findOne({user: req.user.id})
+    profile.experience.remove(req.params.exp_id)
+
+    await profile.save()
+    res.json(profile)
+  } catch (err) {
+    res.status(404).json(err)
+  }
+})
+
+// @route   DELETE /api/profile/education/:edu_id
+// @desc    Delete education from profile
+// @access  Private
+router.delete('/education/:edu_id', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    const profile = await Profile.findOne({user: req.user.id})
+    await profile.education.remove(req.params.edu_id)
+
+    await profile.save()
+    res.json(profile)
+  } catch (err) {
+    res.status(404).json(err)
+  }
+})
+
+// @route   DELETE /api/profile
+// @desc    Delete education from profile
+// @access  Private
+router.delete('/', passport.authenticate('jwt', {session: false}), async (req, res) => {
+  try {
+    await Profile.findOneAndRemove({user: req.user.id})
+    await User.findOneAndRemove({_id: req.user.id})
+
+    // res.json(profile)
+    res.json('success')
   } catch (err) {
     res.status(404).json(err)
   }
