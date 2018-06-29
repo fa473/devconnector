@@ -18,11 +18,11 @@ const User = require('../../models/User')
 router.post('/register', async (req, res) => {
   try {
     const result = validateRegisterInput(req.body)
-    if (result.error) return res.status(400).json(result.error.message)
+    if (result.error) return res.status(400).json(result.error)
 
     // Check if email already registered
-    let user = await User.findOne({email: req.body.email})
-    if (user) return res.status(400).json({email: 'email already registered'})
+    let user = await User.findOne({ email: req.body.email })
+    if (user) return res.status(400).json({ email: 'email already registered' })
 
     // Else create new user and store in db
     const avatar = gravatar.url(req.body.email, {
@@ -53,27 +53,29 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
   try {
     const result = validateLoginInput(req.body)
-    if (result.error) return res.status(400).json(result.error.message)
+    if (result.error) return res.status(400).json(result.error)
 
     // Find user by email
     const email = req.body.email
-    const user = await User.findOne({email: email})
-    if (!user) return res.status(404).json({email: 'User not found'})
+    const user = await User.findOne({ email: email })
+    if (!user) return res.status(404).json({ email: 'User not found' })
 
     // Check password
     const password = req.body.password
     const match = await bcrypt.compare(password, user.password)
-    if (!match) return res.status(400).json({password: 'Invalid email or password'})
+    if (!match)
+      return res.status(400).json({ password: 'Invalid email or password' })
 
     // User matched
-    const payload = { // Create jwt payload
+    const payload = {
+      // Create jwt payload
       id: user.id,
       name: user.name,
       avatar: user.avatar
     }
 
     // Sign token
-    const token = jwt.sign(payload, key, {expiresIn: 3600})
+    const token = jwt.sign(payload, key, { expiresIn: 3600 })
     res.json({
       success: true,
       token: `Bearer ${token}`
