@@ -1,12 +1,8 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
-import axios from 'axios'
+import { withRouter } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { registerUser } from '../../actions/authActions'
-
-// Converts returned joi error object for form display compatibility
-const joiToForms = require('joi-errors-for-forms').form
-const convertToForms = joiToForms()
 
 class Register extends Component {
   constructor() {
@@ -20,37 +16,33 @@ class Register extends Component {
     }
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors })
+    }
+  }
+
   onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit = async (e) => {
-    try {
-      e.preventDefault()
+  onSubmit = (e) => {
+    e.preventDefault()
 
-      const newUser = {
-        name: this.state.name,
-        email: this.state.email,
-        password: this.state.password,
-        password2: this.state.password2
-      }
-      // const result = await axios.post('/api/users/register', newUser)
-      // console.log(result.data)
-
-      this.props.registerUser(newUser)
-    } catch (err) {
-      this.setState({ errors: convertToForms(err.response.data) })
+    const newUser = {
+      name: this.state.name,
+      email: this.state.email,
+      password: this.state.password,
+      password2: this.state.password2
     }
+    this.props.registerUser(newUser, this.props.history)
   }
 
   render() {
     const { errors } = this.state
 
-    const { user } = this.props.auth
-
     return (
       <div className="register">
-        {user ? user.name : null}
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
@@ -147,14 +139,17 @@ class Register extends Component {
 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  // auth: PropTypes.object.isRequired,
+  errors: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired // not sure if correct
 }
 
 const mapStateToProps = (state) => ({
-  auth: state.auth
+  auth: state.auth,
+  errors: state.errors
 })
 
 export default connect(
   mapStateToProps,
   { registerUser }
-)(Register)
+)(withRouter(Register))
