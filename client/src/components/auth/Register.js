@@ -39,7 +39,7 @@ class Register extends Component {
   }
 
   render() {
-    const { errors } = this.state
+    const errors = this.state.errors
 
     return (
       <div className="register">
@@ -139,7 +139,7 @@ class Register extends Component {
 
 Register.propTypes = {
   registerUser: PropTypes.func.isRequired,
-  // auth: PropTypes.object.isRequired,
+  auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired // not sure if correct
 }

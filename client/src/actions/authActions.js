@@ -13,26 +13,47 @@ export const registerUser = (userData, history) => async (dispatch) => {
     await axios.post('/api/users/register', userData)
     history.push('/login')
   } catch (err) {
+    // Only use convertToForms if error is from Joi
+    let errors = {}
+    if (convertToForms(err.response.data)) {
+      errors = convertToForms(err.response.data)
+    } else {
+      errors = err.response.data
+    }
     dispatch({
       type: GET_ERRORS,
-      payload: convertToForms(err.response.data)
+      payload: errors
     })
   }
 }
 
 // Login - Get user token
 export const loginUser = (userData) => async (dispatch) => {
-  const result = await axios.post('/api/users/login', userData)
-  // Save to localStorage
-  const { token } = result.data
-  // Set token to localStorage
-  localStorage.setItem('jwtToken', token)
-  // Set token to auth header
-  setAuthToken(token)
-  // Decode token to get user data
-  const decoded = jwt_decode(token)
-  // Set current user
-  dispatch(setCurrentUser(decoded))
+  try {
+    const result = await axios.post('/api/users/login', userData)
+    // Save to localStorage
+    const { token } = result.data
+    // Set token to localStorage
+    localStorage.setItem('jwtToken', token)
+    // Set token to auth header
+    setAuthToken(token)
+    // Decode token to get user data
+    const decoded = jwt_decode(token)
+    // Set current user
+    dispatch(setCurrentUser(decoded))
+  } catch (err) {
+    // Only use convertToForms if error is from Joi
+    let errors = {}
+    if (convertToForms(err.response.data)) {
+      errors = convertToForms(err.response.data)
+    } else {
+      errors = err.response.data
+    }
+    dispatch({
+      type: GET_ERRORS,
+      payload: errors
+    })
+  }
 }
 
 // Set logged in user
