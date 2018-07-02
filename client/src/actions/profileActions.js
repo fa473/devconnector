@@ -1,9 +1,11 @@
 import axios from 'axios'
+import { logoutUser } from './authActions'
 import {
   GET_PROFILE,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
-  GET_ERRORS
+  GET_ERRORS,
+  SET_CURRENT_USER
 } from './types'
 
 // Converts returned joi error object for form display compatibility
@@ -59,5 +61,20 @@ export const setProfileLoading = () => {
 export const clearCurrentProfile = () => {
   return {
     type: CLEAR_CURRENT_PROFILE
+  }
+}
+
+// Delete account & profile
+export const deleteAccount = () => async (dispatch) => {
+  try {
+    if (window.confirm('Are you sure? This cannot be undone!')) {
+      await axios.delete('/api/profile')
+      dispatch(logoutUser())
+    }
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    })
   }
 }
