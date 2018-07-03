@@ -4,8 +4,7 @@ import {
   GET_PROFILE,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
-  GET_ERRORS,
-  SET_CURRENT_USER
+  GET_ERRORS
 } from './types'
 
 // Converts returned joi error object for form display compatibility
