@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import spinner from './spinner.gif'
 
-class componentName extends Component {
+class Spinner extends Component {
   render() {
     return (
       <div>
@@ -15,4 +15,4 @@ class componentName extends Component {
   }
 }
 
-export default componentName
+export default Spinner
