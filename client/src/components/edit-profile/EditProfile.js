@@ -6,7 +6,7 @@ import TextAreaFieldGroup from '../common/TextAreaFieldGroup'
 import SelectListGroup from '../common/SelectListGroup'
 import InputGroup from '../common/InputGroup'
 import { createProfile, getCurrentProfile } from '../../actions/profileActions'
-import { withRouter } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom'
 
 class CreateProfile extends Component {
   constructor(props) {
@@ -29,8 +29,8 @@ class CreateProfile extends Component {
       errors: {}
     }
 
-    this.onChange = this.onChange.bind(this)
-    this.onSubmit = this.onSubmit.bind(this)
+    // this.onChange = this.onChange.bind(this)
+    // this.onSubmit = this.onSubmit.bind(this)
   }
 
   componentDidMount() {
@@ -55,7 +55,7 @@ class CreateProfile extends Component {
     }
   }
 
-  onSubmit(e) {
+  onSubmit = (e) => {
     e.preventDefault()
 
     const profileData = {
@@ -77,7 +77,7 @@ class CreateProfile extends Component {
     this.props.createProfile(profileData, this.props.history)
   }
 
-  onChange(e) {
+  onChange = (e) => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -151,6 +151,9 @@ class CreateProfile extends Component {
         <div className="container">
           <div className="row">
             <div className="col-md-8 m-auto">
+              <Link to="/dashboard" className="btn btn-light">
+                Go Back
+              </Link>
               <h1 className="display-4 text-center">Edit Your Profile</h1>
               <small className="d-block pb-3">* = required field</small>
               <form onSubmit={this.onSubmit}>

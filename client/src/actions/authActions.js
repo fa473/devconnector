@@ -2,10 +2,8 @@ import axios from 'axios'
 import { GET_ERRORS, SET_CURRENT_USER } from './types'
 import setAuthToken from '../utils/setAuthToken'
 import jwt_decode from 'jwt-decode'
-
 // Converts returned joi error object for form display compatibility
-const joiToForms = require('joi-errors-for-forms').form
-const convertToForms = joiToForms()
+import convertErrorsForForms from '../validation/convert-errors'
 
 // Register User
 export const registerUser = (userData, history) => async (dispatch) => {
@@ -13,16 +11,9 @@ export const registerUser = (userData, history) => async (dispatch) => {
     await axios.post('/api/users/register', userData)
     history.push('/login')
   } catch (err) {
-    // Only use convertToForms if error is from Joi
-    let errors = {}
-    if (convertToForms(err.response.data)) {
-      errors = convertToForms(err.response.data)
-    } else {
-      errors = err.response.data
-    }
     dispatch({
       type: GET_ERRORS,
-      payload: errors
+      payload: convertErrorsForForms(err.response.data)
     })
   }
 }
@@ -42,16 +33,9 @@ export const loginUser = (userData) => async (dispatch) => {
     // Set current user
     dispatch(setCurrentUser(decoded))
   } catch (err) {
-    // Only use convertToForms if error is from Joi
-    let errors = {}
-    if (convertToForms(err.response.data)) {
-      errors = convertToForms(err.response.data)
-    } else {
-      errors = err.response.data
-    }
     dispatch({
       type: GET_ERRORS,
-      payload: errors
+      payload: convertErrorsForForms(err.response.data)
     })
   }
 }

@@ -8,8 +8,7 @@ import {
 } from './types'
 
 // Converts returned joi error object for form display compatibility
-const joiToForms = require('joi-errors-for-forms').form
-const convertToForms = joiToForms()
+import convertErrorsForForms from '../validation/convert-errors'
 
 // Get current profile
 export const getCurrentProfile = () => async (dispatch) => {
@@ -34,17 +33,9 @@ export const createProfile = (profileData, history) => async (dispatch) => {
     await axios.post('/api/profile', profileData)
     history.push('/dashboard')
   } catch (err) {
-    // Only use convertToForms if error is from Joi
-    let errors = {}
-    if (convertToForms(err.response.data)) {
-      errors = convertToForms(err.response.data)
-    } else {
-      errors = err.response.data
-    }
-    console.log(errors)
     dispatch({
       type: GET_ERRORS,
-      payload: errors
+      payload: convertErrorsForForms(err.response.data)
     })
   }
 }
@@ -60,6 +51,66 @@ export const setProfileLoading = () => {
 export const clearCurrentProfile = () => {
   return {
     type: CLEAR_CURRENT_PROFILE
+  }
+}
+
+// Add experience
+export const addExperience = (expData, history) => async (dispatch) => {
+  try {
+    await axios.post('/api/profile/experience', expData)
+    history.push('/dashboard')
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: convertErrorsForForms(err.response.data)
+    })
+  }
+}
+
+// Add education
+export const addEducation = (eduData, history) => async (dispatch) => {
+  try {
+    await axios.post('/api/profile/education', eduData)
+    history.push('/dashboard')
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: convertErrorsForForms(err.response.data)
+    })
+  }
+}
+
+// Delete experience
+export const deleteExperience = (id) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/profile/experience/${id}`)
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    })
+  } catch (err) {
+    console.log(err.response.data)
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    })
+  }
+}
+
+// Delete education
+export const deleteEducation = (id) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/profile/education/${id}`)
+    dispatch({
+      type: GET_PROFILE,
+      payload: res.data
+    })
+  } catch (err) {
+    console.log(err.response.data)
+    dispatch({
+      type: GET_ERRORS,
+      payload: err.response.data
+    })
   }
 }
 
