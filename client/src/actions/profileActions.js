@@ -2,6 +2,7 @@ import axios from 'axios'
 import { logoutUser } from './authActions'
 import {
   GET_PROFILE,
+  GET_PROFILES,
   PROFILE_LOADING,
   CLEAR_CURRENT_PROFILE,
   GET_ERRORS
@@ -110,6 +111,23 @@ export const deleteEducation = (id) => async (dispatch) => {
     dispatch({
       type: GET_ERRORS,
       payload: err.response.data
+    })
+  }
+}
+
+// Get all profiles
+export const getProfiles = () => async (dispatch) => {
+  dispatch(setProfileLoading())
+  try {
+    const res = await axios.get('/api/profile/all')
+    dispatch({
+      type: GET_PROFILES,
+      payload: res.data
+    })
+  } catch (err) {
+    dispatch({
+      type: GET_PROFILES,
+      payload: null
     })
   }
 }
