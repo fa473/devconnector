@@ -15,12 +15,8 @@ class Education extends Component {
         <td>{edu.degree}</td>
         <td>{edu.fieldofstudy}</td>
         <td>
-          <Moment format="YYYY/MM/DD">{edu.from}</Moment> -{' '}
-          {edu.to === null ? (
-            'Now'
-          ) : (
-            <Moment format="YYYY/MM/DD">{edu.to}</Moment>
-          )}
+          <Moment format="MM/YYYY">{edu.from}</Moment> -{' '}
+          {edu.to === null ? 'Now' : <Moment format="MM/YYYY">{edu.to}</Moment>}
         </td>
         <td>
           <button
@@ -41,7 +37,7 @@ class Education extends Component {
               <th>School</th>
               <th>Degree</th>
               <th>Field of Study</th>
-              <th>Years</th>
+              <th>Dates</th>
               <th />
             </tr>
             {education}

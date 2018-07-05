@@ -4,20 +4,6 @@ import { Link } from 'react-router-dom'
 import isEmpty from '../../validation/is-empty'
 
 class ProfileItem extends Component {
-  componentWillMount() {}
-
-  componentDidMount() {}
-
-  componentWillReceiveProps(nextProps) {}
-
-  shouldComponentUpdate(nextProps, nextState) {}
-
-  componentWillUpdate(nextProps, nextState) {}
-
-  componentDidUpdate(prevProps, prevState) {}
-
-  componentWillUnmount() {}
-
   render() {
     const profile = this.props.profile
     return (
