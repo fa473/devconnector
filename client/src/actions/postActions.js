@@ -1,5 +1,11 @@
 import axios from 'axios'
-import { ADD_POST, GET_ERRORS, GET_POSTS, POST_LOADING } from './types'
+import {
+  ADD_POST,
+  GET_ERRORS,
+  GET_POSTS,
+  POST_LOADING,
+  DELETE_POST
+} from './types'
 import convertErrorsForForms from '../validation/convert-errors'
 
 // Add post
@@ -30,6 +36,48 @@ export const getPosts = () => async (dispatch) => {
     dispatch({
       type: GET_POSTS,
       payload: null
+    })
+  }
+}
+
+// Delete post
+export const deletePost = (id) => async (dispatch) => {
+  try {
+    await axios.delete(`/api/posts/${id}`)
+    dispatch({
+      type: DELETE_POST,
+      payload: id
+    })
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: convertErrorsForForms(err.response.data)
+    })
+  }
+}
+
+// Add like
+export const addLike = (id) => async (dispatch) => {
+  try {
+    await axios.post(`/api/posts/like/${id}`)
+    dispatch(getPosts())
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: convertErrorsForForms(err.response.data)
+    })
+  }
+}
+
+// Remove like
+export const removeLike = (id) => async (dispatch) => {
+  try {
+    await axios.post(`/api/posts/unlike/${id}`)
+    dispatch(getPosts())
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: convertErrorsForForms(err.response.data)
     })
   }
 }
