@@ -16,6 +16,12 @@ export class Profile extends Component {
     }
   }
 
+  componentWillReceiveProps = (nextProps) => {
+    if (nextProps.profile.profile === null && this.props.profile.loading) {
+      this.props.history.push('/not-found')
+    }
+  }
+
   render() {
     const { profile, loading } = this.props.profile
     let profileContent
@@ -35,7 +41,9 @@ export class Profile extends Component {
           <ProfileHeader profile={profile} />
           <ProfileAbout profile={profile} />
           <ProfileCreds profile={profile} />
-          <ProfileGithub profile={profile} />
+          {profile.githubusername ? (
+            <ProfileGithub username={profile.githubusername} />
+          ) : null}
         </div>
       )
     }
@@ -58,7 +66,8 @@ const mapStateToProps = (state) => ({
 
 Profile.propTypes = {
   profile: PropTypes.object.isRequired,
-  getProfileByHandle: PropTypes.func.isRequired
+  getProfileByHandle: PropTypes.func.isRequired,
+  history: PropTypes.object.isRequired
 }
 
 export default connect(
