@@ -5,13 +5,15 @@ import {
   GET_POSTS,
   GET_POST,
   POST_LOADING,
-  DELETE_POST
+  DELETE_POST,
+  CLEAR_ERRORS
 } from './types'
 import convertErrorsForForms from '../validation/convert-errors'
 
 // Add post
 export const addPost = (postData) => async (dispatch) => {
   try {
+    dispatch(clearErrors())
     const res = await axios.post('/api/posts', postData)
     dispatch({
       type: ADD_POST,
@@ -103,7 +105,24 @@ export const removeLike = (id) => async (dispatch) => {
 // Add comment
 export const addComment = (id, commentData) => async (dispatch) => {
   try {
+    dispatch(clearErrors())
     const res = await axios.post(`/api/posts/comment/${id}`, commentData)
+    dispatch({
+      type: GET_POST,
+      payload: res.data
+    })
+  } catch (err) {
+    dispatch({
+      type: GET_ERRORS,
+      payload: convertErrorsForForms(err.response.data)
+    })
+  }
+}
+
+// Delete comment
+export const deleteComment = (postId, commentId) => async (dispatch) => {
+  try {
+    const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`)
     dispatch({
       type: GET_POST,
       payload: res.data
@@ -120,5 +139,12 @@ export const addComment = (id, commentData) => async (dispatch) => {
 export const setpostLoading = () => {
   return {
     type: POST_LOADING
+  }
+}
+
+// Clear Errors
+export const clearErrors = () => {
+  return {
+    type: CLEAR_ERRORS
   }
 }

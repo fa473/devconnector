@@ -175,10 +175,6 @@ router.delete(
   passport.authenticate('jwt', { session: false }),
   async (req, res) => {
     try {
-      // Validate input
-      const result = validatePostInput(req.body)
-      if (result.error) return res.status(400).json(result.error.message)
-
       // Find post by id
       const post = await Post.findById(req.params.id)
 
