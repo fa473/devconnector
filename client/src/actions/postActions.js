@@ -3,6 +3,7 @@ import {
   ADD_POST,
   GET_ERRORS,
   GET_POSTS,
+  GET_POST,
   POST_LOADING,
   DELETE_POST
 } from './types'
@@ -23,7 +24,7 @@ export const addPost = (postData) => async (dispatch) => {
     })
   }
 }
-// Get post
+// Get posts
 export const getPosts = () => async (dispatch) => {
   try {
     dispatch(setpostLoading())
@@ -35,6 +36,23 @@ export const getPosts = () => async (dispatch) => {
   } catch (err) {
     dispatch({
       type: GET_POSTS,
+      payload: null
+    })
+  }
+}
+
+// Get post by id
+export const getPost = (id) => async (dispatch) => {
+  try {
+    dispatch(setpostLoading())
+    const res = await axios.get(`/api/posts/${id}`)
+    dispatch({
+      type: GET_POST,
+      payload: res.data
+    })
+  } catch (err) {
+    dispatch({
+      type: GET_POST,
       payload: null
     })
   }

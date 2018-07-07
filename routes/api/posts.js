@@ -9,7 +9,7 @@ const Post = require('../../models/Post')
 const validatePostInput = require('../../validation/post')
 
 // @route   GET /api/posts
-// @desc    Get post
+// @desc    Get all posts
 // @access  Public
 router.get('/', async (req, res) => {
   try {
@@ -21,7 +21,7 @@ router.get('/', async (req, res) => {
 })
 
 // @route   GET /api/posts/:id
-// @desc    Get post by id
+// @desc    Get single post by id
 // @access  Public
 router.get('/:id', async (req, res) => {
   try {
