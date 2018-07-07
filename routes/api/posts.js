@@ -53,7 +53,7 @@ router.post(
       const post = await newPost.save()
       res.json(post)
     } catch (err) {
-      res.status(404).json(err.message)
+      res.status(404).json(err)
     }
   }
 )
@@ -73,7 +73,7 @@ router.delete(
       }
       res.status(401).json({ notauthorized: 'not authorized to delete post' })
     } catch (err) {
-      res.status(404).json(err.message)
+      res.status(404).json(err)
     }
   }
 )
@@ -104,7 +104,7 @@ router.post(
       await post.save()
       res.json(post)
     } catch (err) {
-      res.status(404).json(err.message)
+      res.status(404).json(err)
     }
   }
 )
@@ -137,7 +137,7 @@ router.post(
       await post.save()
       res.json(post)
     } catch (err) {
-      res.status(404).json(err.message)
+      res.status(404).json(err)
     }
   }
 )
@@ -162,7 +162,7 @@ router.post(
       await post.save()
       res.json(post)
     } catch (err) {
-      res.status(404).json(err.message)
+      res.status(404).json(err)
     }
   }
 )
@@ -197,7 +197,7 @@ router.delete(
       // Comment does not belong to current user
       res.json({ unauthorized: 'Cannot delete comment from another user' })
     } catch (err) {
-      res.status(404).json(err.message)
+      res.status(404).json(err)
     }
   }
 )

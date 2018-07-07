@@ -22,13 +22,10 @@ class CommentForm extends Component {
   onSubmit = (e) => {
     e.preventDefault()
 
-    const user = this.props.auth.user
     const postId = this.props.postId
 
     const newComment = {
-      text: this.state.text,
-      name: user.name,
-      avatar: user.avatar
+      text: this.state.text
     }
 
     this.props.addComment(postId, newComment)
@@ -71,7 +68,6 @@ class CommentForm extends Component {
 
 CommentForm.propTypes = {
   addComment: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   postId: PropTypes.string.isRequired
 }
