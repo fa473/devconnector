@@ -1,7 +1,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import isEmpty from '../../validation/is-empty'
 
 class ProfileItem extends Component {
   render() {
@@ -16,12 +15,12 @@ class ProfileItem extends Component {
             <h3>{profile.user.name}</h3>
             <p>
               {profile.status}
-              {isEmpty(profile.company) ? null : (
+              {Object.keys(profile.company).length === 0 ? null : (
                 <span> at {profile.company}</span>
               )}
             </p>
             <p>
-              {isEmpty(profile.location) ? null : (
+              {Object.keys(profile.location).length === 0 ? null : (
                 <span>{profile.location}</span>
               )}
             </p>

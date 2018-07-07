@@ -155,7 +155,6 @@ const mapStateToProps = (state) => ({
 })
 
 AddEducation.propTypes = {
-  profile: PropTypes.object.isRequired,
   errors: PropTypes.object.isRequired,
   addEducation: PropTypes.func.isRequired,
   history: PropTypes.object.isRequired
