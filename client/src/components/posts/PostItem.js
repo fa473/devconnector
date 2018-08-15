@@ -17,7 +17,7 @@ class PostItem extends Component {
   findUserLike(likes) {
     const auth = this.props.auth
     // check likes array to see if user has already liked post
-    return likes.filter((like) => like.user === auth.user.id).length > 0
+    return likes.filter(like => like.user === auth.user.id).length > 0
   }
   render() {
     const { post, auth, showActions } = this.props
@@ -95,7 +95,7 @@ PostItem.propTypes = {
   showActions: PropTypes.func
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   auth: state.auth
 })
 

@@ -88,8 +88,8 @@ router.post(
     try {
       const post = await Post.findById(req.params.id)
       if (
-        post.likes.filter((like) => like.user.toString() === req.user.id)
-          .length > 0
+        post.likes.filter(like => like.user.toString() === req.user.id).length >
+        0
       ) {
         return res
           .status(400)
@@ -121,7 +121,7 @@ router.post(
       const post = await Post.findById(req.params.id)
       // Check if user has liked post
       if (
-        post.likes.filter((like) => like.user.toString() === req.user.id)
+        post.likes.filter(like => like.user.toString() === req.user.id)
           .length === 0
       ) {
         return res
@@ -129,7 +129,7 @@ router.post(
           .json({ cannotunlike: "You haven't liked this post" })
       }
       // Find like to remove from likes array
-      const like = post.likes.find((like) => {
+      const like = post.likes.find(like => {
         return like.user.toString() === req.user.id
       })
       post.likes.remove(like)
@@ -179,7 +179,7 @@ router.delete(
       const post = await Post.findById(req.params.id)
 
       // Find comment with given id
-      const comment = post.comments.find((comment) => {
+      const comment = post.comments.find(comment => {
         return comment.id === req.params.comment_id
       })
 

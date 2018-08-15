@@ -1,9 +1,11 @@
 const Joi = require('joi')
 
-module.exports = function validateLoginInput (data) {
+module.exports = function validateLoginInput(data) {
   const schema = {
-    email: Joi.string().email().required(),
+    email: Joi.string()
+      .email()
+      .required(),
     password: Joi.string().required()
   }
-  return Joi.validate(data, schema, {abortEarly: false})
+  return Joi.validate(data, schema, { abortEarly: false })
 }

@@ -16,7 +16,7 @@ export class Profile extends Component {
     }
   }
 
-  componentWillReceiveProps = (nextProps) => {
+  componentWillReceiveProps = nextProps => {
     if (nextProps.profile.profile === null && this.props.profile.loading) {
       this.props.history.push('/not-found')
     }
@@ -60,7 +60,7 @@ export class Profile extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   profile: state.profile
 })
 

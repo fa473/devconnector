@@ -2,7 +2,7 @@
 const joiToForms = require('joi-errors-for-forms').form
 const convertToForms = joiToForms()
 
-const convertErrorsForForms = (err) => {
+const convertErrorsForForms = err => {
   // Only use convertToForms if error is from Joi
   let errors = {}
   if (convertToForms(err)) {

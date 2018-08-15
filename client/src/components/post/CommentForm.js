@@ -19,7 +19,7 @@ class CommentForm extends Component {
     }
   }
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault()
 
     const postId = this.props.postId
@@ -32,7 +32,7 @@ class CommentForm extends Component {
     this.setState({ text: '' })
   }
 
-  onChange = (e) => {
+  onChange = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -72,7 +72,7 @@ CommentForm.propTypes = {
   postId: PropTypes.string.isRequired
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   errors: state.errors,
   auth: state.auth
 })

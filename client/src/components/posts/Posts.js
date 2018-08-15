@@ -39,7 +39,7 @@ Posts.propTypes = {
   getPosts: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   post: state.post
 })
 

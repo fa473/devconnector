@@ -29,11 +29,11 @@ class Register extends Component {
     }
   }
 
-  onChange = (e) => {
+  onChange = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault()
 
     const newUser = {
@@ -112,7 +112,7 @@ Register.propTypes = {
   history: PropTypes.object.isRequired // not sure if correct
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   auth: state.auth,
   errors: state.errors
 })

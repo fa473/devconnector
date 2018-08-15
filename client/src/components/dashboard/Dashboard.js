@@ -13,7 +13,7 @@ class Dashboard extends Component {
     this.props.getCurrentProfile()
   }
 
-  onDeleteClick = (e) => {
+  onDeleteClick = e => {
     this.props.deleteAccount()
   }
 
@@ -77,7 +77,7 @@ Dashboard.propTypes = {
   deleteAccount: PropTypes.func.isRequired
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   profile: state.profile,
   auth: state.auth
 })

@@ -11,7 +11,7 @@ import {
 import convertErrorsForForms from '../validation/convert-errors'
 
 // Add post
-export const addPost = (postData) => async (dispatch) => {
+export const addPost = postData => async dispatch => {
   try {
     dispatch(clearErrors())
     const res = await axios.post('/api/posts', postData)
@@ -27,7 +27,7 @@ export const addPost = (postData) => async (dispatch) => {
   }
 }
 // Get posts
-export const getPosts = () => async (dispatch) => {
+export const getPosts = () => async dispatch => {
   try {
     dispatch(setpostLoading())
     const res = await axios.get('/api/posts')
@@ -44,7 +44,7 @@ export const getPosts = () => async (dispatch) => {
 }
 
 // Get post by id
-export const getPost = (id) => async (dispatch) => {
+export const getPost = id => async dispatch => {
   try {
     dispatch(setpostLoading())
     const res = await axios.get(`/api/posts/${id}`)
@@ -61,7 +61,7 @@ export const getPost = (id) => async (dispatch) => {
 }
 
 // Delete post
-export const deletePost = (id) => async (dispatch) => {
+export const deletePost = id => async dispatch => {
   try {
     await axios.delete(`/api/posts/${id}`)
     dispatch({
@@ -77,7 +77,7 @@ export const deletePost = (id) => async (dispatch) => {
 }
 
 // Add like
-export const addLike = (id) => async (dispatch) => {
+export const addLike = id => async dispatch => {
   try {
     await axios.post(`/api/posts/like/${id}`)
     dispatch(getPosts())
@@ -90,7 +90,7 @@ export const addLike = (id) => async (dispatch) => {
 }
 
 // Remove like
-export const removeLike = (id) => async (dispatch) => {
+export const removeLike = id => async dispatch => {
   try {
     await axios.post(`/api/posts/unlike/${id}`)
     dispatch(getPosts())
@@ -103,7 +103,7 @@ export const removeLike = (id) => async (dispatch) => {
 }
 
 // Add comment
-export const addComment = (id, commentData) => async (dispatch) => {
+export const addComment = (id, commentData) => async dispatch => {
   try {
     dispatch(clearErrors())
     const res = await axios.post(`/api/posts/comment/${id}`, commentData)
@@ -120,7 +120,7 @@ export const addComment = (id, commentData) => async (dispatch) => {
 }
 
 // Delete comment
-export const deleteComment = (postId, commentId) => async (dispatch) => {
+export const deleteComment = (postId, commentId) => async dispatch => {
   try {
     const res = await axios.delete(`/api/posts/comment/${postId}/${commentId}`)
     dispatch({

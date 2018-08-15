@@ -50,7 +50,7 @@ Post.propTypes = {
   post: PropTypes.object.isRequired
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   post: state.post
 })
 

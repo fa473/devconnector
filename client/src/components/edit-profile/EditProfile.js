@@ -46,7 +46,7 @@ class CreateProfile extends Component {
       // bring skills array back to csv
       // Set component fields state
       const { skills, social, ...profile } = nextProps.profile.profile
-      this.setState((prevState) => ({
+      this.setState(prevState => ({
         ...prevState,
         ...profile,
         ...social,
@@ -55,7 +55,7 @@ class CreateProfile extends Component {
     }
   }
 
-  onSubmit = (e) => {
+  onSubmit = e => {
     e.preventDefault()
 
     const profileData = {
@@ -77,7 +77,7 @@ class CreateProfile extends Component {
     this.props.createProfile(profileData, this.props.history)
   }
 
-  onChange = (e) => {
+  onChange = e => {
     this.setState({ [e.target.name]: e.target.value })
   }
 
@@ -226,7 +226,7 @@ class CreateProfile extends Component {
                   <button
                     type="button"
                     onClick={() => {
-                      this.setState((prevState) => ({
+                      this.setState(prevState => ({
                         displaySocialInput: !prevState.displaySocialInput
                       }))
                     }}
@@ -251,7 +251,7 @@ class CreateProfile extends Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   profile: state.profile,
   errors: state.errors
 })

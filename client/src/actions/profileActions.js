@@ -12,7 +12,7 @@ import {
 import convertErrorsForForms from '../validation/convert-errors'
 
 // Get current profile
-export const getCurrentProfile = () => async (dispatch) => {
+export const getCurrentProfile = () => async dispatch => {
   dispatch(setProfileLoading())
   try {
     const res = await axios.get('/api/profile')
@@ -29,7 +29,7 @@ export const getCurrentProfile = () => async (dispatch) => {
 }
 
 // Get profile by handle
-export const getProfileByHandle = (handle) => async (dispatch) => {
+export const getProfileByHandle = handle => async dispatch => {
   dispatch(setProfileLoading())
   try {
     const res = await axios.get(`/api/profile/handle/${handle}`)
@@ -46,7 +46,7 @@ export const getProfileByHandle = (handle) => async (dispatch) => {
 }
 
 // Create Profile
-export const createProfile = (profileData, history) => async (dispatch) => {
+export const createProfile = (profileData, history) => async dispatch => {
   try {
     await axios.post('/api/profile', profileData)
     history.push('/dashboard')
@@ -73,7 +73,7 @@ export const clearCurrentProfile = () => {
 }
 
 // Add experience
-export const addExperience = (expData, history) => async (dispatch) => {
+export const addExperience = (expData, history) => async dispatch => {
   try {
     await axios.post('/api/profile/experience', expData)
     history.push('/dashboard')
@@ -86,7 +86,7 @@ export const addExperience = (expData, history) => async (dispatch) => {
 }
 
 // Add education
-export const addEducation = (eduData, history) => async (dispatch) => {
+export const addEducation = (eduData, history) => async dispatch => {
   try {
     await axios.post('/api/profile/education', eduData)
     history.push('/dashboard')
@@ -99,7 +99,7 @@ export const addEducation = (eduData, history) => async (dispatch) => {
 }
 
 // Delete experience
-export const deleteExperience = (id) => async (dispatch) => {
+export const deleteExperience = id => async dispatch => {
   try {
     const res = await axios.delete(`/api/profile/experience/${id}`)
     dispatch({
@@ -116,7 +116,7 @@ export const deleteExperience = (id) => async (dispatch) => {
 }
 
 // Delete education
-export const deleteEducation = (id) => async (dispatch) => {
+export const deleteEducation = id => async dispatch => {
   try {
     const res = await axios.delete(`/api/profile/education/${id}`)
     dispatch({
@@ -133,7 +133,7 @@ export const deleteEducation = (id) => async (dispatch) => {
 }
 
 // Get all profiles
-export const getProfiles = () => async (dispatch) => {
+export const getProfiles = () => async dispatch => {
   dispatch(setProfileLoading())
   try {
     const res = await axios.get('/api/profile/all')
@@ -150,7 +150,7 @@ export const getProfiles = () => async (dispatch) => {
 }
 
 // Delete account & profile
-export const deleteAccount = () => async (dispatch) => {
+export const deleteAccount = () => async dispatch => {
   try {
     if (window.confirm('Are you sure? This cannot be undone!')) {
       await axios.delete('/api/profile')

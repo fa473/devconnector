@@ -43,7 +43,7 @@ Landing.propTypes = {
   history: PropTypes.object.isRequired // not sure if correct
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   auth: state.auth
 })
 
